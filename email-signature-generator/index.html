@@ -108,23 +108,12 @@
             }
         }
 
-        textarea {
-            box-sizing: border-box;
-            width: 100%;
-            min-height: 300px;
-            border: 1px solid #dddddd;
-            color: #333333;
-            font-family: Menlo, Consolas, monospace;
-            font-size: 12px;
-            line-height: 18px;
-            padding: 12px;
-        }
     </style>
 </head>
 <body>
 <main>
     <h1>TENTON Email Signature Generator</h1>
-    <p>For Google Docs: click "Select signature", press Command+C, then paste into the shared Google Doc.</p>
+    <p>Please follow instructions on this <a target="_blank" href="https://support.google.com/mail/answer/8395">link</a> how to set an email signature.</p>
 
     <form id="signature-form" class="generator-form">
         <div class="field">
@@ -146,8 +135,7 @@
     </form>
 
     <button type="button" id="select-signature" class="secondary">Select signature</button>
-    <button type="button" id="copy-signature">Copy rendered signature</button>
-    <button type="button" id="copy-html">Copy HTML</button>
+    <button type="button" id="copy-signature">Copy signature</button>
     <div id="status" class="status"></div>
 
     <div id="signature" class="signature-box">
@@ -238,13 +226,11 @@
 </table>
     </div>
 
-    <textarea id="signature-html" readonly></textarea>
 </main>
 
 <script>
     const status = document.getElementById('status');
     const signature = document.getElementById('signature');
-    const source = document.getElementById('signature-html');
     const form = document.getElementById('signature-form');
     const fields = {
         fullName: document.getElementById('full-name'),
@@ -267,10 +253,6 @@
         return `${hasLeadingPlus ? '+' : ''}${digits}`;
     }
 
-    function updateSource() {
-        source.value = signature.innerHTML.trim();
-    }
-
     function updateSignature() {
         const fullName = fields.fullName.value.trim() || 'Full Name';
         const position = fields.position.value.trim() || 'Position';
@@ -290,8 +272,6 @@
             signatureFields.phone.textContent = '';
             signatureFields.phone.removeAttribute('href');
         }
-
-        updateSource();
     }
 
     function setStatus(message) {
@@ -312,13 +292,11 @@
     form.addEventListener('input', updateSignature);
 
     document.getElementById('select-signature').addEventListener('click', () => {
-        updateSource();
         selectSignature();
         setStatus('Signature selected. Press Command+C, then paste into Google Docs.');
     });
 
     document.getElementById('copy-signature').addEventListener('click', async () => {
-        updateSource();
         const html = signature.innerHTML.trim();
         const text = signature.innerText.trim();
 
@@ -333,19 +311,6 @@
         } catch (error) {
             selectSignature();
             setStatus('Copy was blocked. Press Command+C after selecting.');
-        }
-    });
-
-    document.getElementById('copy-html').addEventListener('click', async () => {
-        updateSource();
-        source.select();
-        source.setSelectionRange(0, source.value.length);
-
-        try {
-            await navigator.clipboard.writeText(source.value);
-            setStatus('HTML copied.');
-        } catch (error) {
-            setStatus('HTML selected. Press Command+C.');
         }
     });
 
