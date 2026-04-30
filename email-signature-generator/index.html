@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TENTON Email Signature Generator</title>
+    <style>
+        body {
+            margin: 0;
+            background: #ffffff;
+            color: #222222;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        main {
+            max-width: 920px;
+            padding: 28px;
+        }
+
+        h1 {
+            margin: 0 0 8px 0;
+            font-size: 20px;
+            line-height: 26px;
+        }
+
+        p {
+            margin: 0 0 16px 0;
+            color: #555555;
+            font-size: 14px;
+            line-height: 20px;
+        }
+
+        .generator-form {
+            border: 1px solid #dddddd;
+            display: grid;
+            gap: 14px;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            margin: 18px 0 18px 0;
+            padding: 18px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        label {
+            color: #333333;
+            font-size: 13px;
+            font-weight: 700;
+            line-height: 18px;
+        }
+
+        input {
+            border: 1px solid #cfcfcf;
+            box-sizing: border-box;
+            color: #222222;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 14px;
+            line-height: 20px;
+            padding: 9px 10px;
+            width: 100%;
+        }
+
+        input:focus {
+            border-color: #111111;
+            outline: 2px solid #ffcc00;
+            outline-offset: 1px;
+        }
+
+        button {
+            border: 0;
+            background: #111111;
+            color: #ffffff;
+            cursor: pointer;
+            font-size: 14px;
+            line-height: 18px;
+            margin: 0 8px 16px 0;
+            padding: 10px 14px;
+        }
+
+        button.secondary {
+            background: #ffcc00;
+            color: #111111;
+        }
+
+        .signature-box {
+            border: 1px solid #dddddd;
+            margin-bottom: 24px;
+            overflow-x: auto;
+            padding: 18px;
+        }
+
+        .status {
+            color: #287a3e;
+            font-size: 13px;
+            min-height: 18px;
+        }
+
+        @media (max-width: 640px) {
+            main {
+                padding: 18px;
+            }
+
+            .generator-form {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        textarea {
+            box-sizing: border-box;
+            width: 100%;
+            min-height: 300px;
+            border: 1px solid #dddddd;
+            color: #333333;
+            font-family: Menlo, Consolas, monospace;
+            font-size: 12px;
+            line-height: 18px;
+            padding: 12px;
+        }
+    </style>
+</head>
+<body>
+<main>
+    <h1>TENTON Email Signature Generator</h1>
+    <p>For Google Docs: click "Select signature", press Command+C, then paste into the shared Google Doc.</p>
+
+    <form id="signature-form" class="generator-form">
+        <div class="field">
+            <label for="full-name">Full name</label>
+            <input type="text" id="full-name" name="fullName" value="John Doe" autocomplete="name">
+        </div>
+        <div class="field">
+            <label for="position">Position</label>
+            <input type="text" id="position" name="position" value="Software Engineer" autocomplete="organization-title">
+        </div>
+        <div class="field">
+            <label for="email-address">Email address</label>
+            <input type="email" id="email-address" name="emailAddress" value="john.doe@tenton.co" autocomplete="email">
+        </div>
+        <div class="field">
+            <label for="phone-number">Phone number</label>
+            <input type="tel" id="phone-number" name="phoneNumber" value="" autocomplete="tel">
+        </div>
+    </form>
+
+    <button type="button" id="select-signature" class="secondary">Select signature</button>
+    <button type="button" id="copy-signature">Copy rendered signature</button>
+    <button type="button" id="copy-html">Copy HTML</button>
+    <div id="status" class="status"></div>
+
+    <div id="signature" class="signature-box">
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="width:100%; min-width:451px; border-collapse:collapse; font-family:Arial, Helvetica, sans-serif; color:#7f7f7f;">
+    <tr>
+        <td style="padding:0;">
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="width:100%; min-width:451px; border-collapse:collapse;">
+                <tr>
+                    <td style="padding:0 0 5px 0; font-family:Arial, Helvetica, sans-serif; font-size:17px; line-height:20px; font-weight:700; color:#000000;">
+                        <span id="signature-name">John Doe</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding:0 0 4px 0; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:18px; font-weight:400; color:#7f7f7f;">
+                        <span id="signature-position">Software Engineer</span> at TENTON
+                    </td>
+                </tr>
+                <tr>
+                    <td width="100%" height="1" bgcolor="#ffcc00" style="width:100%; height:1px; line-height:1px; font-size:0; background-color:#ffcc00;">&nbsp;</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td style="padding:16px 0 0 0;">
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="451" style="width:451px; min-width:451px; max-width:451px; border-collapse:collapse;">
+                <tr>
+                    <td width="82" height="82" valign="top" style="width:82px; min-width:82px; max-width:82px; height:82px; padding:0;">
+                        <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="82" height="82" bgcolor="#101010" style="width:82px; min-width:82px; max-width:82px; height:82px; border-collapse:collapse; table-layout:fixed; background-color:#101010; border:1px solid #000000;">
+                            <tr>
+                                <td style="padding:6px;">
+                                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="70" height="70" style="width:70px; min-width:70px; max-width:70px; height:70px; border-collapse:collapse; table-layout:fixed;">
+                                        <tr>
+                                            <td width="14" height="14" style="width:14px; min-width:14px; max-width:14px; height:14px; line-height:14px; font-size:0;">&nbsp;</td>
+                                            <td width="14" height="14" style="width:14px; min-width:14px; max-width:14px; height:14px; line-height:14px; font-size:0;">&nbsp;</td>
+                                            <td width="14" height="14" style="width:14px; min-width:14px; max-width:14px; height:14px; line-height:14px; font-size:0;">&nbsp;</td>
+                                            <td width="14" height="14" style="width:14px; min-width:14px; max-width:14px; height:14px; line-height:14px; font-size:0;">&nbsp;</td>
+                                            <td width="14" height="14" style="width:14px; min-width:14px; max-width:14px; height:14px; line-height:14px; font-size:0;">&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="14" height="14" style="width:14px; min-width:14px; max-width:14px; height:14px; line-height:14px; font-size:0;">&nbsp;</td>
+                                            <td width="14" height="14" style="width:14px; min-width:14px; max-width:14px; height:14px; line-height:14px; font-size:0;">&nbsp;</td>
+                                            <td width="14" height="14" style="width:14px; min-width:14px; max-width:14px; height:14px; line-height:14px; font-size:0;">&nbsp;</td>
+                                            <td width="14" height="14" bgcolor="#f2f2f2" style="width:14px; min-width:14px; max-width:14px; height:14px; line-height:14px; font-size:0; background-color:#f2f2f2;">&nbsp;</td>
+                                            <td width="14" height="14" style="width:14px; min-width:14px; max-width:14px; height:14px; line-height:14px; font-size:0;">&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="14" height="14" style="width:14px; min-width:14px; max-width:14px; height:14px; line-height:14px; font-size:0;">&nbsp;</td>
+                                            <td width="14" height="14" bgcolor="#dbdbdb" style="width:14px; min-width:14px; max-width:14px; height:14px; line-height:14px; font-size:0; background-color:#dbdbdb;">&nbsp;</td>
+                                            <td width="14" height="14" bgcolor="#e7e7e7" style="width:14px; min-width:14px; max-width:14px; height:14px; line-height:14px; font-size:0; background-color:#e7e7e7;">&nbsp;</td>
+                                            <td width="14" height="14" bgcolor="#ffffff" style="width:14px; min-width:14px; max-width:14px; height:14px; line-height:14px; font-size:0; background-color:#ffffff;">&nbsp;</td>
+                                            <td width="14" height="14" style="width:14px; min-width:14px; max-width:14px; height:14px; line-height:14px; font-size:0;">&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="14" height="14" style="width:14px; min-width:14px; max-width:14px; height:14px; line-height:14px; font-size:0;">&nbsp;</td>
+                                            <td width="14" height="14" style="width:14px; min-width:14px; max-width:14px; height:14px; line-height:14px; font-size:0;">&nbsp;</td>
+                                            <td width="14" height="14" style="width:14px; min-width:14px; max-width:14px; height:14px; line-height:14px; font-size:0;">&nbsp;</td>
+                                            <td width="14" height="14" bgcolor="#f2f2f2" style="width:14px; min-width:14px; max-width:14px; height:14px; line-height:14px; font-size:0; background-color:#f2f2f2;">&nbsp;</td>
+                                            <td width="14" height="14" style="width:14px; min-width:14px; max-width:14px; height:14px; line-height:14px; font-size:0;">&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="14" height="14" style="width:14px; min-width:14px; max-width:14px; height:14px; line-height:14px; font-size:0;">&nbsp;</td>
+                                            <td width="14" height="14" style="width:14px; min-width:14px; max-width:14px; height:14px; line-height:14px; font-size:0;">&nbsp;</td>
+                                            <td width="14" height="14" style="width:14px; min-width:14px; max-width:14px; height:14px; line-height:14px; font-size:0;">&nbsp;</td>
+                                            <td width="14" height="14" style="width:14px; min-width:14px; max-width:14px; height:14px; line-height:14px; font-size:0;">&nbsp;</td>
+                                            <td width="14" height="14" style="width:14px; min-width:14px; max-width:14px; height:14px; line-height:14px; font-size:0;">&nbsp;</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td width="21" style="width:21px; min-width:21px; max-width:21px; line-height:1px; font-size:0;">&nbsp;</td>
+                    <td width="348" valign="top" style="width:348px; padding:0; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:21px; mso-line-height-rule:exactly; font-weight:400; color:#7f7f7f; white-space:nowrap;">
+                        <a id="signature-email" href="mailto:john.doe@tenton.co" style="font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:21px; mso-line-height-rule:exactly; color:#7f7f7f; text-decoration:none;">john.doe@tenton.co</a><br>
+                        <span id="signature-phone-group"><a id="signature-phone" href="tel:+38344000000" style="font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:21px; mso-line-height-rule:exactly; color:#7f7f7f; text-decoration:none;">+383 44 000 000</a><span id="signature-phone-spacer" style="display:inline-block; width:20px; line-height:1px; font-size:0;">&nbsp;</span></span><a href="https://www.tenton.co" style="font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:21px; mso-line-height-rule:exactly; color:#7f7f7f; text-decoration:underline;">www.tenton.co</a><br>
+                        Str. Nazim Gafurri 2, Prishtina 10000, Kosova<br>
+                        <a href="https://www.linkedin.com/company/tenton" style="font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:21px; mso-line-height-rule:exactly; color:#7f7f7f; text-decoration:underline;">LinkedIn</a>
+                        <span style="display:inline-block; width:20px; line-height:1px; font-size:0;">&nbsp;</span>
+                        <a href="https://www.facebook.com/tentonized" style="font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:21px; mso-line-height-rule:exactly; color:#7f7f7f; text-decoration:underline;">Facebook</a>
+                        <span style="display:inline-block; width:20px; line-height:1px; font-size:0;">&nbsp;</span>
+                        <a href="https://www.instagram.com/tenton.co/" style="font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:21px; mso-line-height-rule:exactly; color:#7f7f7f; text-decoration:underline;">Instagram</a>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+    </div>
+
+    <textarea id="signature-html" readonly></textarea>
+</main>
+
+<script>
+    const status = document.getElementById('status');
+    const signature = document.getElementById('signature');
+    const source = document.getElementById('signature-html');
+    const form = document.getElementById('signature-form');
+    const fields = {
+        fullName: document.getElementById('full-name'),
+        position: document.getElementById('position'),
+        emailAddress: document.getElementById('email-address'),
+        phoneNumber: document.getElementById('phone-number')
+    };
+    const signatureFields = {
+        name: document.getElementById('signature-name'),
+        position: document.getElementById('signature-position'),
+        email: document.getElementById('signature-email'),
+        phone: document.getElementById('signature-phone'),
+        phoneGroup: document.getElementById('signature-phone-group')
+    };
+
+    function normalizePhone(value) {
+        const phone = value.trim();
+        const hasLeadingPlus = phone.startsWith('+');
+        const digits = phone.replace(/\D/g, '');
+        return `${hasLeadingPlus ? '+' : ''}${digits}`;
+    }
+
+    function updateSource() {
+        source.value = signature.innerHTML.trim();
+    }
+
+    function updateSignature() {
+        const fullName = fields.fullName.value.trim() || 'Full Name';
+        const position = fields.position.value.trim() || 'Position';
+        const emailAddress = fields.emailAddress.value.trim() || 'email@tenton.co';
+        const phoneNumber = fields.phoneNumber.value.trim();
+
+        signatureFields.name.textContent = fullName;
+        signatureFields.position.textContent = position;
+        signatureFields.email.textContent = emailAddress;
+        signatureFields.email.href = `mailto:${emailAddress}`;
+        if (phoneNumber) {
+            signatureFields.phoneGroup.style.display = 'inline';
+            signatureFields.phone.textContent = phoneNumber;
+            signatureFields.phone.href = `tel:${normalizePhone(phoneNumber)}`;
+        } else {
+            signatureFields.phoneGroup.style.display = 'none';
+            signatureFields.phone.textContent = '';
+            signatureFields.phone.removeAttribute('href');
+        }
+
+        updateSource();
+    }
+
+    function setStatus(message) {
+        status.textContent = message;
+        window.setTimeout(() => {
+            status.textContent = '';
+        }, 2200);
+    }
+
+    function selectSignature() {
+        const range = document.createRange();
+        range.selectNodeContents(signature);
+        const selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+    }
+
+    form.addEventListener('input', updateSignature);
+
+    document.getElementById('select-signature').addEventListener('click', () => {
+        updateSource();
+        selectSignature();
+        setStatus('Signature selected. Press Command+C, then paste into Google Docs.');
+    });
+
+    document.getElementById('copy-signature').addEventListener('click', async () => {
+        updateSource();
+        const html = signature.innerHTML.trim();
+        const text = signature.innerText.trim();
+
+        try {
+            await navigator.clipboard.write([
+                new ClipboardItem({
+                    'text/html': new Blob([html], { type: 'text/html' }),
+                    'text/plain': new Blob([text], { type: 'text/plain' })
+                })
+            ]);
+            setStatus('Rendered signature copied.');
+        } catch (error) {
+            selectSignature();
+            setStatus('Copy was blocked. Press Command+C after selecting.');
+        }
+    });
+
+    document.getElementById('copy-html').addEventListener('click', async () => {
+        updateSource();
+        source.select();
+        source.setSelectionRange(0, source.value.length);
+
+        try {
+            await navigator.clipboard.writeText(source.value);
+            setStatus('HTML copied.');
+        } catch (error) {
+            setStatus('HTML selected. Press Command+C.');
+        }
+    });
+
+    updateSignature();
+</script>
+</body>
+</html>
